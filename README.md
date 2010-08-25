@@ -41,16 +41,17 @@ response is stored in the database.
 
 Now we will define the relationships:
 
-> questions ::: Quiz <1-*> Question
-> responses ::: Quiz <1-*> Response
+> relationship questions = Quiz <1-*> Question
+
+> relationship responses = Quiz <1-*> Response
 
 Step 2: Generate the corresponding code
 ---------------------------------------
 
 Put all the code from step 1 in a file called schema.phs and execute the command `persist
 schema.phs`. This will generate a file called Schema.hs with all the necessary
-code to continue.
-
+code to continue. For now, each declaration (either a datatype or a relationship) has to
+be separated by a newline.
 
 Step 3: Use the code
 --------------------

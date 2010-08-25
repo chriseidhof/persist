@@ -1,0 +1,22 @@
+data Response = Response {
+  name    :: String,
+  email   :: String,
+  date    :: Date,
+  answers :: [Int]
+}
+
+data Quiz = Quiz {
+  description :: String,
+  subject     :: String
+}
+
+data Question = Question {
+  title   :: String,
+  choiceA :: String,
+  choiceB :: String,
+  choiceC :: String
+}
+
+relationship questions = Quiz <1-*> Question
+
+relationship responses = Quiz <1-*> Response
