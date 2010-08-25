@@ -5,8 +5,12 @@ import Data.Char (isSpace)
 import Language.Haskell.Exts.Parser hiding (parse)
 import Language.Haskell.Exts.Syntax
 
-parseFile :: String -> IO [ParseResult (Either Decl Relationship)]
-parseFile filename = fmap (map parse . groupDecls . lines) (readFile filename)
+parseFile :: String -> IO (ParseResult [Either Decl Relationship])
+parseFile filename = fmap pipeline (readFile filename)
+
+
+pipeline :: String -> ParseResult [Either Decl Relationship]
+pipeline = sequence . map parse . groupDecls . lines
 
 groupDecls :: [String] -> [[String]]
 groupDecls = filter (not . null) . run []
