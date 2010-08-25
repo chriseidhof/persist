@@ -18,4 +18,4 @@ instance Pretty Decl where
 
 --TODO: remove me
 instance Pretty Relationship where
-  pretty (Relationship nm multiplicity l r) = "-- " ++ unwords ["relationship: ", nm, show multiplicity, l, r]
+  pretty (Relationship nm multiplicity l r _) = "-- " ++ unwords ["relationship: ", nm, show multiplicity, l, r]

@@ -8,6 +8,7 @@ data Relationship = Relationship
   , relMultiplicity :: Multiplicity
   , relFromName     :: String
   , relToName       :: String
+  , reversed        :: Bool
   } deriving (Show)
 
 isToOne :: Relationship -> Bool
@@ -15,7 +16,7 @@ isToOne r = m == OneToOne || m == ManyToOne
   where m = relMultiplicity r
 
 reverseRelationship :: Relationship -> Relationship
-reverseRelationship (Relationship nm m f t) = Relationship nm (reverseMultiplicity m) t f
+reverseRelationship (Relationship nm m f t r) = Relationship nm (reverseMultiplicity m) t f (not r)
 
 reverseMultiplicity :: Multiplicity -> Multiplicity
 reverseMultiplicity OneToMany = ManyToOne 

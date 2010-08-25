@@ -29,7 +29,7 @@ parse decl@(x:_) = case head (words x) of
 parseRelationship :: [String] -> ParseResult Relationship
 parseRelationship ["relationship", nm, "=", ident1, multiplicity, ident2] = do
   m <- parseMultiplicity multiplicity
-  return (Relationship nm m ident1 ident2)
+  return (Relationship nm m ident1 ident2 False)
 parseRelationship r = ParseFailed (SrcLoc "" 0 0) ("Not recognized: " ++ unwords r)
 
 

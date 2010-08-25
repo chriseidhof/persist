@@ -1,7 +1,6 @@
 module Data.Persist.TypeCheck where
 
 import Data.Persist.AST
-import Control.Monad.Error
 import Data.Either (partitionEithers)
 import Language.Haskell.Exts.Syntax
 
