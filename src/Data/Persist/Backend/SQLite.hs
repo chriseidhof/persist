@@ -3,7 +3,6 @@
 module Data.Persist.Backend.SQLite where
 
 import Generics.Regular
-import Generics.Regular.TH()
 import Database.HDBC (quickQuery', fromSql, toSql, SqlValue (..), commit, disconnect)
 import Database.HDBC.Sqlite3 (Connection, connectSqlite3)
 import Data.Persist.Backend.Interface
@@ -59,12 +58,15 @@ instance Persistent SQLite where
       
     return (fromSql rowId) -- TODO!
     
-  -- addRelation :: (Regular from, Regular to) 
-  --             => Ref from 
-  --             -> Ref to
-  --             -> Relationship
-  --             -> p ()
-  addRelationImpl = undefined
+  addRelationImpl a b tableName = do
+    c <- sqliteLift (gets conn)
+    let record   = [("x", DBInt a), ("y", DBInt b)]
+        query    = insertSQL tableName record
+        bindVals = tableSqlValues record
+    debug query
+    liftIO $ quickQuery' c query bindVals
+    return ()
+
 
 runSQLite :: String -> SQLite a -> IO a
 runSQLite dbName operation = do

@@ -3,11 +3,13 @@ module Main where
 
 import System.Console.CmdArgs
 import System.Directory (doesFileExist)
+import System.IO (stdout, stderr, Handle, hPutStrLn, openFile, hClose, IOMode (..))
 import Data.Persist.Parser
-import Data.Persist.Pretty 
+-- import Data.Persist.Pretty 
 import Data.Persist.TypeCheck
 import Data.Persist.Compile
 import Language.Haskell.Exts.Parser hiding (parse)
+import Language.Haskell.Exts.Pretty (prettyPrint)
 
 data Persist = Persist {
   filename :: String,
@@ -25,15 +27,20 @@ main :: IO ()
 main =  do
   opts    <- cmdArgs persist
   exists  <- doesFileExist (filename opts)
-  if not exists then putStrLn ("File does not exist: " ++ filename opts) else do
-    decls <- parseFile (filename opts)
-    print decls
+  if not exists then putStrError ("File does not exist: " ++ filename opts) else do
+    handle <- maybe (return stdout) (flip openFile WriteMode) (output opts)
+    parseAndPrettyPrint handle (filename opts)
+    hClose handle
 
-test :: IO ()
-test = do
-  decls <- parseFile "examples/Quiz.phs"
+parseAndPrettyPrint :: Handle -> String -> IO ()
+parseAndPrettyPrint handle fp = do
+  decls <- parseFile fp
   case decls of
        (ParseOk d) -> case typecheck d of
-                           Left err -> putStrLn $ "typecheck error: " ++ err
-                           Right () -> putStrLn $ unlines $ map pretty $ compile d
-       (ParseFailed _ e) -> putStrLn "Parse error:" >> putStrLn e
+                           Left err -> putStrError $ "typecheck error: " ++ err
+                           Right () -> hPutStrLn handle $ prettyPrint $ compile d
+       (ParseFailed _ e) -> putStrError "Parse error:" >> putStrError e
+
+putStrError = hPutStrLn stderr
+
+test = parseAndPrettyPrint stdout "examples/Quiz.phs"

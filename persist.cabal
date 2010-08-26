@@ -60,7 +60,8 @@ Executable persist
                  haskell-src-exts,
                  cmdargs,
                  regular >= 0.2.4,
-                 directory >= 1.0
+                 directory >= 1.0,
+                 mtl >= 1.0
   
   -- Modules not exported by this package.
   -- Other-modules:       

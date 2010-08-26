@@ -3,15 +3,18 @@ module Data.Persist.Backend.Interface
   ( Ref (..)
   , DBValue (..)
   , create
+  , addRelation
   , Persistent (..)
+  , Relation (..)
   ) where
 
 import Control.Applicative
 import Generics.Regular
-import Data.Persist.AST
 
 --todo: also index ref by persistent class
-data Ref a = Ref Int
+data Ref a = Ref {refKey :: Int}
+
+data Relation a b = Relation { relTableName :: String }
 
 -- | A database value is always one of these types.
 data DBValue = DBString  String
@@ -24,14 +27,17 @@ create :: (Regular a, DatabaseRepr (PF a), Persistent p) => a -> p (Ref a)
 create x = fmap Ref $ createImpl (tableName genX) (toDatabaseValue genX)
  where genX = from x
 
+addRelation :: Persistent p => Ref a -> Ref b -> Relation a b -> p ()
+addRelation (Ref a) (Ref b) (Relation r) = addRelationImpl a b r
 
+-- | This is the class backends need to implement.
 class Functor p => Persistent p where
   createImpl       :: String              -- | The tableName
                    -> [(String,DBValue)]  -- | Keys and values
                    -> p Int               -- | The resulting id
   addRelationImpl :: Int
                   -> Int
-                  -> Relationship
+                  -> String
                   -> p ()
 
 

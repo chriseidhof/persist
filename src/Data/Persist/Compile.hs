@@ -4,11 +4,19 @@ import Data.Persist.AST
 import Language.Haskell.Exts.Syntax
 import Data.Either (partitionEithers)
 
-compile :: [Either Decl Relationship] -> [Decl]
-compile input = let (decls, relationships) = partitionEithers input
-                    relationshipsBothDirections = relationships ++ (map reverseRelationship relationships)
-                    dbClass = UnQual (Ident "Persistent")
+
+compile :: [Either Decl Relationship] -> Module
+compile input = Module noLoc (ModuleName "Model") [] Nothing Nothing imports (compileDecls input)
+ where imports = map mkImport ["Data.Persist.Backend.Interface", "Generics.Regular"]
+       mkImport nm = ImportDecl noLoc (ModuleName nm) False False Nothing Nothing Nothing
+
+
+compileDecls :: [Either Decl Relationship] -> [Decl]
+compileDecls input = let (decls, relationships) = partitionEithers input
+                         relationshipsBothDirections = relationships ++ (map reverseRelationship relationships)
+                         dbClass = UnQual (Ident "Persistent")
                 in concat [ decls
+                          , concatMap derivingRegular decls
                           , compileRelationships decls relationships
                           , concatMap (createMethod dbClass relationshipsBothDirections) decls
                           ]
@@ -51,6 +59,14 @@ relationshipsToFun :: [Relationship] -> (Type -> Type)
 relationshipsToFun []     = id
 relationshipsToFun (x:xs) = TyFun (TyApp refType $ TyCon (UnQual (Ident (relToName x)))) . relationshipsToFun xs
 
+derivingRegular :: Decl -> [Decl]
+derivingRegular x = [ SpliceDecl noLoc $ SpliceExp $ ParenSplice $ var "deriveAll" `App` TypQuote typeName `App` (Lit $ String pfName)
+                    , TypeInsDecl noLoc (TyCon pFType `TyApp` TyCon typeName) (TyCon $ UnQual $ Ident pfName)
+                    ]
+ where nm = name x
+       pfName = "PF" ++ nm
+       typeName = UnQual $ Ident nm
+
 involvedRelationships :: String -> [Relationship] -> [Relationship]
 involvedRelationships d = filter (\r -> relFromName r == d && isToOne r)
 
@@ -58,6 +74,8 @@ typ :: Decl -> Type
 typ (DataDecl _ _ _ nm  _ _ _) = TyCon (UnQual nm)
 typ _ = error "Compile.typ"
 
+pFType :: QName
+pFType = (UnQual (Ident "PF"))
 
 refType :: Type
 refType = TyCon (UnQual (Ident "Ref"))
