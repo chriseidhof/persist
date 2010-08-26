@@ -6,8 +6,9 @@ import Data.Either (partitionEithers)
 
 
 compile :: [Either Decl Relationship] -> Module
-compile input = Module noLoc (ModuleName "Model") [] Nothing Nothing imports (compileDecls input)
- where imports = map mkImport ["Data.Persist.Backend.Interface", "Generics.Regular"]
+compile input = Module noLoc (ModuleName "Model") pragmas Nothing Nothing imports (compileDecls input)
+ where imports     = map mkImport ["Data.Persist.Backend.Interface", "Generics.Regular", "Data.Persist.Backend.SQLite"]
+       pragmas     = [LanguagePragma noLoc $ map Ident ["TemplateHaskell", "EmptyDataDecls", "TypeFamilies"]]
        mkImport nm = ImportDecl noLoc (ModuleName nm) False False Nothing Nothing Nothing
 
 
@@ -17,12 +18,20 @@ compileDecls input = let (decls, relationships) = partitionEithers input
                          dbClass = UnQual (Ident "Persistent")
                 in concat [ decls
                           , concatMap derivingRegular decls
-                          , compileRelationships decls relationships
+                          , concatMap (compileRelationship decls) relationships
                           , concatMap (createMethod dbClass relationshipsBothDirections) decls
                           ]
 
-compileRelationships :: [Decl] -> [Relationship] -> [Decl]
-compileRelationships _ _ = [] -- todo
+compileRelationship :: [Decl] -> Relationship -> [Decl]
+compileRelationship _ r = [ TypeSig noLoc [funName] (relType `TyApp` from `TyApp` to)
+                          , FunBind [Match noLoc funName [] Nothing rhs (BDecls [])]
+                          ]
+ where funName = Ident $ relName r
+       rhs     = UnGuardedRhs $ Con (UnQual (Ident "Relation")) `App` (Lit $ String $ relName r)
+       from    = TyCon (UnQual (Ident (relFromName r)))
+       to      = TyCon (UnQual (Ident (relToName r)))
+
+
 
 createMethod :: QName -> [Relationship] -> Decl -> [Decl]
 createMethod dbClass rs  d = 
@@ -42,7 +51,7 @@ createMethod dbClass rs  d =
         f = relationshipsToFun rels
 
 rhs relArgs = Do $ concat 
-  [ [ Generator noLoc (PVar (Ident "i")) (App (var "create") (var "value")) ]
+  [ [ Generator noLoc (PVar (Ident "i")) (App (var "create_") (var "value")) ]
   , concatMap relCreate relArgs
   , [ Qualifier $ App (var "return") (var "i") ]
   ]
@@ -76,6 +85,9 @@ typ _ = error "Compile.typ"
 
 pFType :: QName
 pFType = (UnQual (Ident "PF"))
+
+relType :: Type
+relType = TyCon (UnQual (Ident "Relation"))
 
 refType :: Type
 refType = TyCon (UnQual (Ident "Ref"))

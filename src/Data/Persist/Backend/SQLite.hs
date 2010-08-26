@@ -1,28 +1,14 @@
 {-# LANGUAGE TypeSynonymInstances #-}
-{-# LANGUAGE TemplateHaskell, EmptyDataDecls, TypeFamilies #-}
-module Data.Persist.Backend.SQLite where
+module Data.Persist.Backend.SQLite (SQLite, runSQLite) where
 
-import Generics.Regular
 import Database.HDBC (quickQuery', fromSql, toSql, SqlValue (..), commit, disconnect)
 import Database.HDBC.Sqlite3 (Connection, connectSqlite3)
 import Data.Persist.Backend.Interface
 import Control.Monad.State
 import Data.Char (toLower)
 import Data.List (intercalate)
-
--- Examples
-data Response = Response {
-  name    :: String,
-  email   :: String,
-  date    :: String,
-  answers :: [Int]
-}
-
-example :: Response
-example = Response "chris" "test" "date" [1,2,3]
-
-$(deriveAll ''Response "PFResponse")
-type instance PF Response = PFResponse
+import Data.Maybe (listToMaybe)
+import Data.ByteString.Char8 (unpack)
 
 data SQLiteState = SQLiteState {
   conn :: Connection
@@ -56,7 +42,7 @@ instance Persistent SQLite where
 
     [[rowId]] <- liftIO $ quickQuery' c "SELECT last_insert_rowid()" []
       
-    return (fromSql rowId) -- TODO!
+    return (fromSql rowId)
     
   addRelationImpl a b tableName = do
     c <- sqliteLift (gets conn)
@@ -66,7 +52,18 @@ instance Persistent SQLite where
     debug query
     liftIO $ quickQuery' c query bindVals
     return ()
+  findImpl x tableName keys = do
+    c <- sqliteLift (gets conn)
+    result <- liftIO $ quickQuery' c (findSQL tableName keys) [toSql x]
+    return $ fmap (map toDBValue) $ listToMaybe result
 
+toDBValue :: SqlValue -> DBValue
+toDBValue (SqlString s)     = DBString s
+toDBValue (SqlByteString s) = DBString (unpack s)
+toDBValue (SqlInt32 i)      = DBInt $ fromIntegral i
+toDBValue (SqlInt64 i)      = DBInt $ fromIntegral i
+toDBValue (SqlInteger i)    = DBInt (fromIntegral i)
+toDBValue v                 = error $ "SQLlite.toDBValue Unsupported value: " ++ show v
 
 runSQLite :: String -> SQLite a -> IO a
 runSQLite dbName operation = do
@@ -79,12 +76,22 @@ runSQLite dbName operation = do
 insertSQL :: String -> [(String,DBValue)] -> String
 insertSQL nm keysAndValues = unwords
  [ "INSERT INTO "
- , nm
+ , lower nm
  , parens (commaList keys)
  , "VALUES"
  , parens (commaList $ map (const "?") keys)
  ]
  where (keys,_) = unzip keysAndValues
+
+findSQL :: String -> [String] -> String
+findSQL tableName keys = unwords
+ [ "SELECT"
+ , commaList keys
+ , "FROM"
+ , tableName
+ , "WHERE"
+ , "ROWID = ?"
+ ]
 
 tableSqlValues :: [(String, DBValue)] -> [SqlValue]
 tableSqlValues = map (toSqlValue . snd)

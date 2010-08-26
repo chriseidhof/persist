@@ -1,21 +1,21 @@
 data Response = Response {
   name    :: String,
   email   :: String,
-  date    :: Date,
+  date    :: String,
   answers :: [Int]
-}
+} deriving (Show, Read)
 
 data Quiz = Quiz {
   description :: String,
   subject     :: String
-}
+} deriving (Show, Read)
 
 data Question = Question {
   title   :: String,
   choiceA :: String,
   choiceB :: String,
   choiceC :: String
-}
+} deriving (Show, Read)
 
 relationship questions = Quiz <1-*> Question
 
