@@ -3,6 +3,8 @@ module Data.Persist.Interface
   (  
   -- * Operations on relationships
     addRelation
+  , findRelation  
+  , findRelation'  
   -- * Operations on entities
   , find
   -- * Functions exposed for auto-generated code
@@ -36,6 +38,12 @@ create_ x = fmap Ref $ createImpl (tableName genX) (toDatabaseValue genX)
 -- | Add a relation between entities of type @a@ and @b@.
 addRelation :: Persistent p => Ref a -> Ref b -> Relation a b -> p ()
 addRelation (Ref a) (Ref b) (Relation r) = addRelationImpl a b r
+
+findRelation :: Persistent p => Ref a -> Relation a b -> p [Ref b]
+findRelation (Ref x) relation = fmap (map Ref) $ findRelationImpl (Left x) (relTableName relation)
+
+findRelation' :: Persistent p => Ref b -> Relation a b -> p [Ref b]
+findRelation' (Ref y) relation = fmap (map Ref) $ findRelationImpl (Right y) (relTableName relation)
 
 -- | Finds an entity by reference.
 find :: (Regular a, DatabaseRepr (PF a), Persistent p) => Ref a -> p (Maybe a)

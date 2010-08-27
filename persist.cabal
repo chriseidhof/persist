@@ -48,7 +48,18 @@ Build-type:          Simple
 -- Constraint on the version of Cabal needed to build this package.
 Cabal-version:       >=1.2
 
-
+Library
+  HS-Source-Dirs: src
+  Exposed-Modules: Data.Persist.Interface,
+                   Data.Persist.Backend.Interface,
+                   Data.Persist.Backend.SQLite
+    
+  -- Other-modules:
+  Build-depends: base == 4.*,
+                 regular >= 0.2.4,
+                 bytestring >= 0.9,
+                 HDBC >= 2.2,
+                 HDBC-sqlite3 >= 2.3
 
 Executable persist
   HS-Source-Dirs: src

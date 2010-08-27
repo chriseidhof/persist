@@ -52,9 +52,14 @@ instance Persistent SQLite where
     debug query
     liftIO $ quickQuery' c query bindVals
     return ()
+  
+  findRelationImpl key tableName = do
+    c <- sqliteLift (gets conn)
+    result <- liftIO $ quickQuery' c (findSQL tableName (either (const "x") (const "y") key) [either (const "y") (const "x") key]) [toSql $ either id id key]
+    return $ map (fromSql . head) $ result
   findImpl x tableName keys = do
     c <- sqliteLift (gets conn)
-    result <- liftIO $ quickQuery' c (findSQL tableName keys) [toSql x]
+    result <- liftIO $ quickQuery' c (findSQL tableName "ROWID" keys) [toSql x]
     return $ fmap (map toDBValue) $ listToMaybe result
 
 toDBValue :: SqlValue -> DBValue
@@ -83,14 +88,15 @@ insertSQL nm keysAndValues = unwords
  ]
  where (keys,_) = unzip keysAndValues
 
-findSQL :: String -> [String] -> String
-findSQL tableName keys = unwords
+findSQL :: String -> String -> [String] -> String
+findSQL tableName column keys = unwords
  [ "SELECT"
  , commaList keys
  , "FROM"
  , tableName
  , "WHERE"
- , "ROWID = ?"
+ , column  
+ , "= ?"
  ]
 
 tableSqlValues :: [(String, DBValue)] -> [SqlValue]
