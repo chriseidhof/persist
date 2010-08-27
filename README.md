@@ -10,7 +10,8 @@ Example
 ============
 
 You start by defining your entities and relationships. An entity is simply a
-datatype name with attributes, and a relationship 
+datatype name with attributes, and a relationship is a description of how your
+entities relate to each other.
 
 Step 1: Create your schema
 --------------------------
@@ -48,10 +49,24 @@ Now we will define the relationships:
 Step 2: Generate the corresponding code
 ---------------------------------------
 
-Put all the code from step 1 in a file called schema.phs and execute the command `persist
-schema.phs`. This will generate a file called Schema.hs with all the necessary
-code to continue. For now, each declaration (either a datatype or a relationship) has to
-be separated by a newline.
+Put all the code from step 1 in a file called `Schema.phs` and execute the command `persist
+Schema.phs -o Schema.hs`. This will generate a file called `Schema.hs` with all the necessary
+code to continue. 
+
+In particular, the generated file will contain the following things:
+
+* The original datatype definitions
+* Template Haskell code to derive [regular](http://hackage.haskell.org/package/regular) instances
+* A value of type `Relationship a b` for each relationship between entities `a` and `b`.
+* A function `createEntity` for each entity. This function not only asks for the
+  entity value, but also for references to relationships. 
+  
+  For example, for the `Question` entity, the type is `createQuestion :: Persistent db => Question -> Ref Quiz -> db (Ref Question)`.
+  This means that you have to provide a question and a reference to the `Quiz`,
+  and it will return a reference to the newly created `Question` entity. 
 
 Step 3: Use the code
 --------------------
+
+* Now you are ready to use the generated code. Import the module and you can
+  start using the `createEntity` functions. You can add 

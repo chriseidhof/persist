@@ -7,7 +7,7 @@ import Data.Either (partitionEithers)
 
 compile :: [Either Decl Relationship] -> Module
 compile input = Module noLoc (ModuleName "Model") pragmas Nothing Nothing imports (compileDecls input)
- where imports     = map mkImport ["Data.Persist.Backend.Interface", "Generics.Regular", "Data.Persist.Backend.SQLite"]
+ where imports     = map mkImport ["Data.Persist.Interface", "Generics.Regular", "Data.Persist.Backend.SQLite"]
        pragmas     = [LanguagePragma noLoc $ map Ident ["TemplateHaskell", "EmptyDataDecls", "TypeFamilies"]]
        mkImport nm = ImportDecl noLoc (ModuleName nm) False False Nothing Nothing Nothing
 
