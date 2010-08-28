@@ -8,6 +8,8 @@ module Data.Persist.Interface
   -- * Operations on entities
   , find
   -- * Functions exposed for auto-generated code
+  , createSchemaEntity_  
+  , createSchemaRelationship_ 
   , Ref (..)
   , create_
   , Relation (..)
@@ -44,6 +46,14 @@ findRelation (Ref x) relation = fmap (map Ref) $ findRelationImpl (Left x) (relT
 
 findRelation' :: Persistent p => Ref b -> Relation a b -> p [Ref b]
 findRelation' (Ref y) relation = fmap (map Ref) $ findRelationImpl (Right y) (relTableName relation)
+
+-- | Create the schema for entities of type @a@. The argument may be undefined (it's only necessary for the type)
+createSchemaEntity_ :: (Regular a, DatabaseRepr (PF a), Persistent p) => a -> p ()
+createSchemaEntity_ undefinedValue = createSchemaForEntity (tableName $ from undefinedValue) (keys undefinedValue)
+
+-- | Create the schema for the relationship
+createSchemaRelationship_ :: Persistent p => Relation a b -> p ()
+createSchemaRelationship_ rel = createSchemaForRelationship (relTableName rel)
 
 -- | Finds an entity by reference.
 find :: (Regular a, DatabaseRepr (PF a), Persistent p) => Ref a -> p (Maybe a)

@@ -55,12 +55,23 @@ instance Persistent SQLite where
   
   findRelationImpl key tableName = do
     c <- sqliteLift (gets conn)
-    result <- liftIO $ quickQuery' c (findSQL tableName (either (const "x") (const "y") key) [either (const "y") (const "x") key]) [toSql $ either id id key]
+    let query = findSQL tableName (either (const "x") (const "y") key) [either (const "y") (const "x") key]
+    result <- liftIO $ quickQuery' c query [toSql $ either id id key]
     return $ map (fromSql . head) $ result
   findImpl x tableName keys = do
     c <- sqliteLift (gets conn)
     result <- liftIO $ quickQuery' c (findSQL tableName "ROWID" keys) [toSql x]
     return $ fmap (map toDBValue) $ listToMaybe result
+    
+  createSchemaForEntity tableName keys = do
+    c <- sqliteLift (gets conn)
+    liftIO $ quickQuery' c (createSQL tableName keys) []
+    return ()
+  
+  createSchemaForRelationship tableName = do
+    c <- sqliteLift (gets conn)
+    liftIO $ quickQuery' c (createSQL tableName ["x","y"]) []
+    return ()
 
 toDBValue :: SqlValue -> DBValue
 toDBValue (SqlString s)     = DBString s
@@ -81,7 +92,7 @@ runSQLite dbName operation = do
 insertSQL :: String -> [(String,DBValue)] -> String
 insertSQL nm keysAndValues = unwords
  [ "INSERT INTO "
- , lower nm
+ , nm
  , parens (commaList keys)
  , "VALUES"
  , parens (commaList $ map (const "?") keys)
@@ -99,6 +110,9 @@ findSQL tableName column keys = unwords
  , "= ?"
  ]
 
+createSQL :: String -> [String] -> String
+createSQL tableName keys = unwords ["CREATE TABLE", tableName, parens (commaList keys)]
+
 tableSqlValues :: [(String, DBValue)] -> [SqlValue]
 tableSqlValues = map (toSqlValue . snd)
  where toSqlValue (DBString s) = toSql s
@@ -111,6 +125,3 @@ parens x = "(" ++ x ++ ")"
 
 commaList :: [String] -> String
 commaList = intercalate ","
-
-lower :: String -> String
-lower = map toLower

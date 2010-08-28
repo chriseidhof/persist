@@ -27,3 +27,9 @@ class (Monad p, Functor p) => Persistent p where
            -> String   -- ^ The tableName
            -> [String] -- ^ A list of fields that need to be fetch
            -> p (Maybe [DBValue]) -- ^ If the record is found, a @Just@ containing the values for the fields
+
+  createSchemaForEntity :: String   -- ^ The tableName
+                        -> [String] -- ^ The keys
+                        -> p ()
+  createSchemaForRelationship :: String -- ^ The tableName
+                              -> p ()   

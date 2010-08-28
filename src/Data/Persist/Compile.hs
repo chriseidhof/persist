@@ -20,6 +20,7 @@ compileDecls input = let (decls, relationships) = partitionEithers input
                           , concatMap derivingRegular decls
                           , concatMap (compileRelationship decls) relationships
                           , concatMap (createMethod dbClass relationshipsBothDirections) decls
+                          , createSchema dbClass decls relationships
                           ]
 
 compileRelationship :: [Decl] -> Relationship -> [Decl]
@@ -60,6 +61,17 @@ rhs relArgs = Do $ concat
         addRelation r s | reversed r == False = Qualifier $ App (App (var "addRelation") (var "i")) (var s)
                         | otherwise           = Qualifier $ var "addRelation" `App` var s `App` var "i" `App` var (relName r)
                         
+createSchema :: QName -> [Decl] -> [Relationship] -> [Decl]
+createSchema dbClass decls rels = 
+  [ TypeSig noLoc [funName] (TyForall Nothing ctx $ monad `TyApp` unit_tycon)
+  , FunBind [Match noLoc funName [] Nothing (UnGuardedRhs (schemaRhs decls rels)) (BDecls []) ] 
+  ]
+  where ctx = [ClassA dbClass [monad]]
+        monad = TyVar (Ident "db")
+        schemaRhs decls rels = Do (map entSchema decls ++ map relSchema rels)
+        funName = Ident "createSchema"
+        entSchema ent = Qualifier $ App (var "createSchemaEntity_") (ExpTypeSig noLoc (var "undefined") (TyCon (UnQual (Ident $ name ent))))
+        relSchema rel = Qualifier $ App (var "createSchemaRelationship_") (var $ relName rel)
 
 var :: String -> Exp
 var = Var . UnQual . Ident
