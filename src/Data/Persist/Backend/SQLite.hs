@@ -5,13 +5,13 @@ import Database.HDBC (quickQuery', fromSql, toSql, SqlValue (..), commit, discon
 import Database.HDBC.Sqlite3 (Connection, connectSqlite3)
 import Data.Persist.Backend.Interface
 import Control.Monad.State
-import Data.Char (toLower)
 import Data.List (intercalate)
 import Data.Maybe (listToMaybe)
 import Data.ByteString.Char8 (unpack)
 
 data SQLiteState = SQLiteState {
-  conn :: Connection
+  conn :: Connection,
+  debug_ :: String -> SQLite ()
 }
 
 newtype SQLite a = SQLite {unSQLite :: StateT SQLiteState IO a}
@@ -30,7 +30,7 @@ sqliteLift :: StateT SQLiteState IO a -> SQLite a
 sqliteLift = SQLite
 
 debug :: String -> SQLite ()
-debug = liftIO . putStrLn
+debug s = sqliteLift (gets debug_) >>= \x -> x s
 
 instance Persistent SQLite where
   createImpl tableName record = do
@@ -52,25 +52,50 @@ instance Persistent SQLite where
     debug query
     liftIO $ quickQuery' c query bindVals
     return ()
+
+  updateImpl x tableName record = do
+    c <- sqliteLift (gets conn)
+    let (keys, bindVals) = unzip record
+        query            = updateSQL tableName keys x
+    debug query
+    liftIO $ quickQuery' c query (map toSqlValue bindVals)
+    return ()
+      
   
   findRelationImpl key tableName = do
     c <- sqliteLift (gets conn)
-    let query = findSQL tableName (either (const "x") (const "y") key) [either (const "y") (const "x") key]
+    let query = findSQL tableName (Just $ either (const "x") (const "y") key) [either (const "y") (const "x") key]
+    debug query
     result <- liftIO $ quickQuery' c query [toSql $ either id id key]
     return $ map (fromSql . head) $ result
   findImpl x tableName keys = do
     c <- sqliteLift (gets conn)
-    result <- liftIO $ quickQuery' c (findSQL tableName "ROWID" keys) [toSql x]
+    let query = findSQL tableName (Just "id") keys
+    debug query
+    result <- liftIO $ quickQuery' c query  [toSql x]
     return $ fmap (map toDBValue) $ listToMaybe result
+
+  findAllImpl tableName keys = do
+    c <- sqliteLift (gets conn)
+    let query = findSQL tableName Nothing ("id":keys)
+    debug query
+    result <- liftIO $ quickQuery' c query []
+    debug (show result)
+    return $ map (map toDBValue) $ result
+
     
   createSchemaForEntity tableName keys = do
     c <- sqliteLift (gets conn)
-    liftIO $ quickQuery' c (createSQL tableName keys) []
+    let query = (createSQL tableName keys)
+    debug query
+    liftIO $ quickQuery' c query []
     return ()
   
   createSchemaForRelationship tableName = do
     c <- sqliteLift (gets conn)
-    liftIO $ quickQuery' c (createSQL tableName ["x","y"]) []
+    let query = (createSQL tableName ["x","y"])
+    debug query
+    liftIO $ quickQuery' c query []
     return ()
 
 toDBValue :: SqlValue -> DBValue
@@ -84,7 +109,7 @@ toDBValue v                 = error $ "SQLlite.toDBValue Unsupported value: " ++
 runSQLite :: String -> SQLite a -> IO a
 runSQLite dbName operation = do
   c <- connectSqlite3 dbName
-  (result,_) <- runStateT (unSQLite operation) (SQLiteState c)
+  (result,_) <- runStateT (unSQLite operation) (SQLiteState c (liftIO . putStrLn))
   commit c
   disconnect c
   return result
@@ -99,25 +124,36 @@ insertSQL nm keysAndValues = unwords
  ]
  where (keys,_) = unzip keysAndValues
 
-findSQL :: String -> String -> [String] -> String
-findSQL tableName column keys = unwords
+findSQL :: String -> Maybe String -> [String] -> String
+findSQL tableName whereColumn keys = unwords
  [ "SELECT"
  , commaList keys
  , "FROM"
  , tableName
- , "WHERE"
- , column  
- , "= ?"
- ]
+ , whereClause
+ ] where whereClause = maybe "" (\r -> "WHERE " ++ r ++ " = ?") whereColumn
+
+updateSQL :: String -> [String] -> Int -> String
+updateSQL tableName keys rowId = unwords
+  [ "UPDATE"
+  , tableName
+  , "SET"
+  , commaList $ map (\key -> key ++ " = ?")  keys
+  , "WHERE id ="
+  , show rowId
+  ]
+
 
 createSQL :: String -> [String] -> String
-createSQL tableName keys = unwords ["CREATE TABLE", tableName, parens (commaList keys)]
+createSQL tableName keys = unwords ["CREATE TABLE", tableName, parens (commaList ("id INTEGER PRIMARY KEY":keys))]
 
 tableSqlValues :: [(String, DBValue)] -> [SqlValue]
 tableSqlValues = map (toSqlValue . snd)
- where toSqlValue (DBString s) = toSql s
-       toSqlValue (DBInt    s) = toSql s
-       toSqlValue (DBBool   s) = toSql s
+
+toSqlValue :: DBValue -> SqlValue
+toSqlValue (DBString s) = toSql s
+toSqlValue (DBInt    s) = toSql s
+toSqlValue (DBBool   s) = toSql s
 
 -- Utilities
 parens :: String -> String

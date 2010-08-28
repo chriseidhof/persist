@@ -2,6 +2,7 @@
 module Data.Persist.Backend.Interface 
   ( DBValue (..)
   , Persistent (..)
+  , dbValueAsInt
   ) where
 
 -- | A database value is always one of these types.
@@ -10,6 +11,10 @@ data DBValue = DBString  String -- ^ A String
              | DBBool    Bool   -- ^ A boolean
              deriving (Show, Read)
 
+dbValueAsInt :: DBValue -> Maybe Int
+dbValueAsInt (DBString s) = Just (read s) -- todo!
+dbValueAsInt (DBInt i)    = Just i
+dbValueAsInt _            = Nothing
 
 -- | This is the class backends need to implement
 class (Monad p, Functor p) => Persistent p where
@@ -27,6 +32,13 @@ class (Monad p, Functor p) => Persistent p where
            -> String   -- ^ The tableName
            -> [String] -- ^ A list of fields that need to be fetch
            -> p (Maybe [DBValue]) -- ^ If the record is found, a @Just@ containing the values for the fields
+  
+  findAllImpl :: String -> [String] -> p [[DBValue]]
+  
+  updateImpl :: Int                 -- ^ The id of the record
+             -> String              -- ^ The tableName
+             -> [(String, DBValue)] -- ^ The new values
+             -> p ()
 
   createSchemaForEntity :: String   -- ^ The tableName
                         -> [String] -- ^ The keys
