@@ -59,7 +59,8 @@ Library
                  regular >= 0.2.4,
                  bytestring >= 0.9,
                  HDBC >= 2.2,
-                 HDBC-sqlite3 >= 2.3
+                 HDBC-sqlite3 >= 2.3,
+                 utility-ht >= 0.0.5
 
 Executable persist
   HS-Source-Dirs: src

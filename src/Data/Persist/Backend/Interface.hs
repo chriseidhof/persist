@@ -5,6 +5,8 @@ module Data.Persist.Backend.Interface
   , dbValueAsInt
   ) where
 
+import Text.Read.HT (maybeRead)
+
 -- | A database value is always one of these types.
 data DBValue = DBString  String -- ^ A String
              | DBInt     Int    -- ^ An integer
@@ -12,7 +14,7 @@ data DBValue = DBString  String -- ^ A String
              deriving (Show, Read)
 
 dbValueAsInt :: DBValue -> Maybe Int
-dbValueAsInt (DBString s) = Just (read s) -- todo!
+dbValueAsInt (DBString s) = maybeRead s
 dbValueAsInt (DBInt i)    = Just i
 dbValueAsInt _            = Nothing
 

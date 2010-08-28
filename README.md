@@ -4,7 +4,7 @@ Persist
 Persist is an abstraction layer in Haskell over storage systems such as
 relational databases, nosql databases and more. Persists includes a code
 generator that takes your model and generates a Haskell interface for it.
-Persist comes with multiple backends: a sqlite backend and a couchdb backend.
+Persist comes with multiple backends, eventually. For now there is only an SQLite backend.
 
 Example
 ============
@@ -75,5 +75,10 @@ All the code in the file is backend-independent.
 Step 3: Use the code
 --------------------
 
-* Now you are ready to use the generated code. Import the module and you can
-  start using the `createEntity` functions. You can add entities, update 
+* Now you are ready to use the generated code. Have a look at examples/Test.lhs to see what's possible, or browse the haddock documentation.
+
+History
+=======
+
+Many of the ideas in this library come from my [thesis](http://github.com/chriseidhof/thesis) work.
+In the library described in my thesis I tried to prevent offline code generation, which resulted in a lot of type-level functions. In turn, this resulted in very messy errors when you did something wrong. This library is an experiment in finding the sweet spot between generated code, type safety and user friendliness.
