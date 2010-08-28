@@ -50,7 +50,7 @@ Step 2: Generate the corresponding code
 ---------------------------------------
 
 Put all the code from step 1 in a file called `examples/Model.phs` and execute the command `persist
-examples/Model.phs -o examples/Model.hs`. This will generate a file called `Quiz.hs` with all the necessary
+examples/Model.phs -o examples/Model.hs`. This will generate a file called `Model.hs` with all the necessary
 code to continue. 
 
 In particular, the generated file will contain the following things:
@@ -80,5 +80,5 @@ Step 3: Use the code
 History
 =======
 
-Many of the ideas in this library come from my [thesis](http://github.com/chriseidhof/thesis) work.
+Many of the ideas in this library come from my [thesis](http://github.com/chriseidhof/thesis/downloads) work.
 In the library described in my thesis I tried to prevent offline code generation, which resulted in a lot of type-level functions. In turn, this resulted in very messy errors when you did something wrong. This library is an experiment in finding the sweet spot between generated code, type safety and user friendliness.
