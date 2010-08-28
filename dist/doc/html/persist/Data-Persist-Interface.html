@@ -1,0 +1,1460 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--Rendered using the Haskell Html Library v0.2-->
+<HTML
+><HEAD
+><META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"
+><TITLE
+>Data.Persist.Interface</TITLE
+><LINK HREF="haddock.css" REL="stylesheet" TYPE="text/css"
+><SCRIPT SRC="haddock-util.js" TYPE="text/javascript"
+></SCRIPT
+><SCRIPT TYPE="text/javascript"
+>window.onload = function () {setSynopsis("mini_Data-Persist-Interface.html")};</SCRIPT
+></HEAD
+><BODY
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="topbar"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD
+><IMG SRC="haskell_icon.gif" WIDTH="16" HEIGHT="16" ALT=" "
+></TD
+><TD CLASS="title"
+>persist-0.1: A persistence library for Haskell</TD
+><TD CLASS="topbut"
+><A HREF="index.html"
+>Contents</A
+></TD
+><TD CLASS="topbut"
+><A HREF="doc-index.html"
+>Index</A
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="modulebar"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD
+><FONT SIZE="6"
+>Data.Persist.Interface</FONT
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="section4"
+><B
+>Contents</B
+></TD
+></TR
+><TR
+><TD
+><DL
+><DT
+><A HREF="#1"
+>Operations on relationships
+</A
+></DT
+><DT
+><A HREF="#2"
+>Operations on entities
+</A
+></DT
+><DT
+><A HREF="#3"
+>Functions exposed for auto-generated code
+</A
+></DT
+></DL
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="section1"
+>Synopsis</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3AaddRelation"
+>addRelation</A
+> :: <A HREF="Data-Persist-Interface.html#t%3APersistent"
+>Persistent</A
+> p =&gt; <A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> a -&gt; <A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> b -&gt; <A HREF="Data-Persist-Interface.html#t%3ARelation"
+>Relation</A
+> a b -&gt; p <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/ghc-prim-0.2.0.0/GHC-Unit.html#t%3A%28%29"
+>()</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3AfindAllRelated"
+>findAllRelated</A
+> :: (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3ARegular"
+>Regular</A
+> b, DatabaseRepr (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3APF"
+>PF</A
+> b), <A HREF="Data-Persist-Interface.html#t%3APersistent"
+>Persistent</A
+> p) =&gt; <A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> a -&gt; <A HREF="Data-Persist-Interface.html#t%3ARelation"
+>Relation</A
+> a b -&gt; p [b]</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3AfindAllRelated%27"
+>findAllRelated'</A
+> :: (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3ARegular"
+>Regular</A
+> a, DatabaseRepr (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3APF"
+>PF</A
+> a), <A HREF="Data-Persist-Interface.html#t%3APersistent"
+>Persistent</A
+> p) =&gt; <A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> b -&gt; <A HREF="Data-Persist-Interface.html#t%3ARelation"
+>Relation</A
+> a b -&gt; p [a]</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3AfindRelation"
+>findRelation</A
+> :: <A HREF="Data-Persist-Interface.html#t%3APersistent"
+>Persistent</A
+> p =&gt; <A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> a -&gt; <A HREF="Data-Persist-Interface.html#t%3ARelation"
+>Relation</A
+> a b -&gt; p [<A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> b]</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3AfindRelation%27"
+>findRelation'</A
+> :: <A HREF="Data-Persist-Interface.html#t%3APersistent"
+>Persistent</A
+> p =&gt; <A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> b -&gt; <A HREF="Data-Persist-Interface.html#t%3ARelation"
+>Relation</A
+> a b -&gt; p [<A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> a]</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Afind"
+>find</A
+> :: (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3ARegular"
+>Regular</A
+> a, DatabaseRepr (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3APF"
+>PF</A
+> a), <A HREF="Data-Persist-Interface.html#t%3APersistent"
+>Persistent</A
+> p) =&gt; <A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> a -&gt; p (<A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> a)</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aupdate"
+>update</A
+> :: (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3ARegular"
+>Regular</A
+> a, DatabaseRepr (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3APF"
+>PF</A
+> a), <A HREF="Data-Persist-Interface.html#t%3APersistent"
+>Persistent</A
+> p) =&gt; <A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> a -&gt; a -&gt; p <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/ghc-prim-0.2.0.0/GHC-Unit.html#t%3A%28%29"
+>()</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3AfindAll"
+>findAll</A
+> :: <SPAN CLASS="keyword"
+>forall</SPAN
+> p a. (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3ARegular"
+>Regular</A
+> a, DatabaseRepr (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3APF"
+>PF</A
+> a), <A HREF="Data-Persist-Interface.html#t%3APersistent"
+>Persistent</A
+> p) =&gt; p [(<A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> a, a)]</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3AcreateSchemaEntity_"
+>createSchemaEntity_</A
+> :: (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3ARegular"
+>Regular</A
+> a, DatabaseRepr (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3APF"
+>PF</A
+> a), <A HREF="Data-Persist-Interface.html#t%3APersistent"
+>Persistent</A
+> p) =&gt; a -&gt; p <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/ghc-prim-0.2.0.0/GHC-Unit.html#t%3A%28%29"
+>()</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3AcreateSchemaRelationship_"
+>createSchemaRelationship_</A
+> :: <A HREF="Data-Persist-Interface.html#t%3APersistent"
+>Persistent</A
+> p =&gt; <A HREF="Data-Persist-Interface.html#t%3ARelation"
+>Relation</A
+> a b -&gt; p <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/ghc-prim-0.2.0.0/GHC-Unit.html#t%3A%28%29"
+>()</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A HREF="#t%3ARef"
+>Ref</A
+> a = <A HREF="#v%3ARef"
+>Ref</A
+> {<TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="recfield"
+><A HREF="#v%3ArefKey"
+>refKey</A
+> :: <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Int.html#t%3AInt"
+>Int</A
+></TD
+></TR
+></TABLE
+>}</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Acreate_"
+>create_</A
+> :: (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3ARegular"
+>Regular</A
+> a, DatabaseRepr (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3APF"
+>PF</A
+> a), <A HREF="Data-Persist-Interface.html#t%3APersistent"
+>Persistent</A
+> p) =&gt; a -&gt; p (<A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> a)</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A HREF="#t%3ARelation"
+>Relation</A
+> a b = <A HREF="#v%3ARelation"
+>Relation</A
+> {<TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="recfield"
+><A HREF="#v%3ArelTableName"
+>relTableName</A
+> :: <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+></TD
+></TR
+></TABLE
+>}</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>class</SPAN
+> (<A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Control-Monad.html#t%3AMonad"
+>Monad</A
+> p, <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Control-Monad.html#t%3AFunctor"
+>Functor</A
+> p) =&gt; <A HREF="#t%3APersistent"
+>Persistent</A
+> p  <SPAN CLASS="keyword"
+>where</SPAN
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3AcreateImpl"
+>createImpl</A
+> :: <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+> -&gt; [(<A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+>, <A HREF="Data-Persist-Backend-Interface.html#t%3ADBValue"
+>DBValue</A
+>)] -&gt; p <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Int.html#t%3AInt"
+>Int</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3AaddRelationImpl"
+>addRelationImpl</A
+> :: <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Int.html#t%3AInt"
+>Int</A
+> -&gt; <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Int.html#t%3AInt"
+>Int</A
+> -&gt; <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+> -&gt; p <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/ghc-prim-0.2.0.0/GHC-Unit.html#t%3A%28%29"
+>()</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3AfindRelationImpl"
+>findRelationImpl</A
+> :: <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Either.html#t%3AEither"
+>Either</A
+> <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Int.html#t%3AInt"
+>Int</A
+> <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Int.html#t%3AInt"
+>Int</A
+> -&gt; <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+> -&gt; p [<A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Int.html#t%3AInt"
+>Int</A
+>]</TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3AfindImpl"
+>findImpl</A
+> :: <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Int.html#t%3AInt"
+>Int</A
+> -&gt; <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+> -&gt; [<A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+>] -&gt; p (<A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> [<A HREF="Data-Persist-Backend-Interface.html#t%3ADBValue"
+>DBValue</A
+>])</TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3AfindAllImpl"
+>findAllImpl</A
+> :: <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+> -&gt; [<A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+>] -&gt; p [[<A HREF="Data-Persist-Backend-Interface.html#t%3ADBValue"
+>DBValue</A
+>]]</TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3AupdateImpl"
+>updateImpl</A
+> :: <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Int.html#t%3AInt"
+>Int</A
+> -&gt; <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+> -&gt; [(<A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+>, <A HREF="Data-Persist-Backend-Interface.html#t%3ADBValue"
+>DBValue</A
+>)] -&gt; p <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/ghc-prim-0.2.0.0/GHC-Unit.html#t%3A%28%29"
+>()</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3AcreateSchemaForEntity"
+>createSchemaForEntity</A
+> :: <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+> -&gt; [<A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+>] -&gt; p <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/ghc-prim-0.2.0.0/GHC-Unit.html#t%3A%28%29"
+>()</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3AcreateSchemaForRelationship"
+>createSchemaForRelationship</A
+> :: <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+> -&gt; p <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/ghc-prim-0.2.0.0/GHC-Unit.html#t%3A%28%29"
+>()</A
+></TD
+></TR
+></TABLE
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="section1"
+><A NAME="1"
+><A NAME="1"
+>Operations on relationships
+</A
+></A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:addRelation"
+><A NAME="v%3AaddRelation"
+></A
+></A
+><B
+>addRelation</B
+> :: <A HREF="Data-Persist-Interface.html#t%3APersistent"
+>Persistent</A
+> p =&gt; <A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> a -&gt; <A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> b -&gt; <A HREF="Data-Persist-Interface.html#t%3ARelation"
+>Relation</A
+> a b -&gt; p <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/ghc-prim-0.2.0.0/GHC-Unit.html#t%3A%28%29"
+>()</A
+></TD
+></TR
+><TR
+><TD CLASS="doc"
+>Add a relation between entities of type <TT
+>a</TT
+> and <TT
+>b</TT
+>.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:findAllRelated"
+><A NAME="v%3AfindAllRelated"
+></A
+></A
+><B
+>findAllRelated</B
+> :: (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3ARegular"
+>Regular</A
+> b, DatabaseRepr (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3APF"
+>PF</A
+> b), <A HREF="Data-Persist-Interface.html#t%3APersistent"
+>Persistent</A
+> p) =&gt; <A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> a -&gt; <A HREF="Data-Persist-Interface.html#t%3ARelation"
+>Relation</A
+> a b -&gt; p [b]</TD
+></TR
+><TR
+><TD CLASS="doc"
+>Find all entities in the relationship
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:findAllRelated'"
+><A NAME="v%3AfindAllRelated%27"
+></A
+></A
+><B
+>findAllRelated'</B
+> :: (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3ARegular"
+>Regular</A
+> a, DatabaseRepr (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3APF"
+>PF</A
+> a), <A HREF="Data-Persist-Interface.html#t%3APersistent"
+>Persistent</A
+> p) =&gt; <A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> b -&gt; <A HREF="Data-Persist-Interface.html#t%3ARelation"
+>Relation</A
+> a b -&gt; p [a]</TD
+></TR
+><TR
+><TD CLASS="doc"
+>Find all entities in the relationship
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:findRelation"
+><A NAME="v%3AfindRelation"
+></A
+></A
+><B
+>findRelation</B
+> :: <A HREF="Data-Persist-Interface.html#t%3APersistent"
+>Persistent</A
+> p =&gt; <A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> a -&gt; <A HREF="Data-Persist-Interface.html#t%3ARelation"
+>Relation</A
+> a b -&gt; p [<A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> b]</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:findRelation'"
+><A NAME="v%3AfindRelation%27"
+></A
+></A
+><B
+>findRelation'</B
+> :: <A HREF="Data-Persist-Interface.html#t%3APersistent"
+>Persistent</A
+> p =&gt; <A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> b -&gt; <A HREF="Data-Persist-Interface.html#t%3ARelation"
+>Relation</A
+> a b -&gt; p [<A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> a]</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="section1"
+><A NAME="2"
+><A NAME="2"
+>Operations on entities
+</A
+></A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:find"
+><A NAME="v%3Afind"
+></A
+></A
+><B
+>find</B
+> :: (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3ARegular"
+>Regular</A
+> a, DatabaseRepr (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3APF"
+>PF</A
+> a), <A HREF="Data-Persist-Interface.html#t%3APersistent"
+>Persistent</A
+> p) =&gt; <A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> a -&gt; p (<A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> a)</TD
+></TR
+><TR
+><TD CLASS="doc"
+>Finds an entity by reference.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:update"
+><A NAME="v%3Aupdate"
+></A
+></A
+><B
+>update</B
+> :: (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3ARegular"
+>Regular</A
+> a, DatabaseRepr (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3APF"
+>PF</A
+> a), <A HREF="Data-Persist-Interface.html#t%3APersistent"
+>Persistent</A
+> p) =&gt; <A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> a -&gt; a -&gt; p <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/ghc-prim-0.2.0.0/GHC-Unit.html#t%3A%28%29"
+>()</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:findAll"
+><A NAME="v%3AfindAll"
+></A
+></A
+><B
+>findAll</B
+> :: <SPAN CLASS="keyword"
+>forall</SPAN
+> p a. (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3ARegular"
+>Regular</A
+> a, DatabaseRepr (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3APF"
+>PF</A
+> a), <A HREF="Data-Persist-Interface.html#t%3APersistent"
+>Persistent</A
+> p) =&gt; p [(<A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> a, a)]</TD
+></TR
+><TR
+><TD CLASS="doc"
+>Find all entities
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="section1"
+><A NAME="3"
+><A NAME="3"
+>Functions exposed for auto-generated code
+</A
+></A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:createSchemaEntity_"
+><A NAME="v%3AcreateSchemaEntity_"
+></A
+></A
+><B
+>createSchemaEntity_</B
+> :: (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3ARegular"
+>Regular</A
+> a, DatabaseRepr (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3APF"
+>PF</A
+> a), <A HREF="Data-Persist-Interface.html#t%3APersistent"
+>Persistent</A
+> p) =&gt; a -&gt; p <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/ghc-prim-0.2.0.0/GHC-Unit.html#t%3A%28%29"
+>()</A
+></TD
+></TR
+><TR
+><TD CLASS="doc"
+>Create the schema for entities of type <TT
+>a</TT
+>. The argument may be undefined (it's only necessary for the type)
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:createSchemaRelationship_"
+><A NAME="v%3AcreateSchemaRelationship_"
+></A
+></A
+><B
+>createSchemaRelationship_</B
+> :: <A HREF="Data-Persist-Interface.html#t%3APersistent"
+>Persistent</A
+> p =&gt; <A HREF="Data-Persist-Interface.html#t%3ARelation"
+>Relation</A
+> a b -&gt; p <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/ghc-prim-0.2.0.0/GHC-Unit.html#t%3A%28%29"
+>()</A
+></TD
+></TR
+><TR
+><TD CLASS="doc"
+>Create the schema for the relationship
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A NAME="t:Ref"
+><A NAME="t%3ARef"
+></A
+></A
+><B
+>Ref</B
+> a </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="ndoc"
+>A reference to an entity of type <TT
+>a</TT
+>. Never construct these values manually: the implementation is exposed so that new backends can make use of it.
+</TD
+></TR
+><TR
+><TD CLASS="section4"
+>Constructors</TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="5" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+><A NAME="v:Ref"
+><A NAME="v%3ARef"
+></A
+></A
+><B
+>Ref</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="body" COLSPAN="2"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+><A NAME="v:refKey"
+><A NAME="v%3ArefKey"
+></A
+></A
+><B
+>refKey</B
+> :: <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Int.html#t%3AInt"
+>Int</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+></TABLE
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="section4"
+><IMG SRC="minus.gif" CLASS="coll" ONCLICK="toggle(this,'i:Ref')" ALT="show/hide"
+> Instances</TD
+></TR
+><TR
+><TD CLASS="body"
+><DIV ID="i:Ref" STYLE="display:block;"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Text-Show.html#t%3AShow"
+>Show</A
+> (<A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> a)</TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:create_"
+><A NAME="v%3Acreate_"
+></A
+></A
+><B
+>create_</B
+> :: (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3ARegular"
+>Regular</A
+> a, DatabaseRepr (<A HREF="/Users/chris/.cabal/share/doc/regular-0.2.4/html/Generics-Regular-Base.html#t%3APF"
+>PF</A
+> a), <A HREF="Data-Persist-Interface.html#t%3APersistent"
+>Persistent</A
+> p) =&gt; a -&gt; p (<A HREF="Data-Persist-Interface.html#t%3ARef"
+>Ref</A
+> a)</TD
+></TR
+><TR
+><TD CLASS="doc"
+>Creates a new value. To assure your database stays correct, never use this function directly.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A NAME="t:Relation"
+><A NAME="t%3ARelation"
+></A
+></A
+><B
+>Relation</B
+> a b </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="ndoc"
+>Describes a relation between <TT
+>a</TT
+> and <TT
+>b</TT
+>. Never construct these values manually.
+</TD
+></TR
+><TR
+><TD CLASS="section4"
+>Constructors</TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="5" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+><A NAME="v:Relation"
+><A NAME="v%3ARelation"
+></A
+></A
+><B
+>Relation</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="body" COLSPAN="2"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+><A NAME="v:relTableName"
+><A NAME="v%3ArelTableName"
+></A
+></A
+><B
+>relTableName</B
+> :: <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+></TABLE
+></TD
+></TR
+></TABLE
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>class</SPAN
+> (<A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Control-Monad.html#t%3AMonad"
+>Monad</A
+> p, <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Control-Monad.html#t%3AFunctor"
+>Functor</A
+> p) =&gt; <A NAME="t:Persistent"
+><A NAME="t%3APersistent"
+></A
+></A
+><B
+>Persistent</B
+> p  <SPAN CLASS="keyword"
+>where</SPAN
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="ndoc"
+>This is the class backends need to implement
+</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="section4"
+>Methods</TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><A NAME="v:createImpl"
+><A NAME="v%3AcreateImpl"
+></A
+></A
+><B
+>createImpl</B
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+>:: <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+></TD
+><TD CLASS="rdoc"
+>The tableName
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; [(<A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+>, <A HREF="Data-Persist-Backend-Interface.html#t%3ADBValue"
+>DBValue</A
+>)]</TD
+><TD CLASS="rdoc"
+>Keys and values
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; p <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Int.html#t%3AInt"
+>Int</A
+></TD
+><TD CLASS="rdoc"
+>The resulting id
+</TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:addRelationImpl"
+><A NAME="v%3AaddRelationImpl"
+></A
+></A
+><B
+>addRelationImpl</B
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+>:: <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Int.html#t%3AInt"
+>Int</A
+></TD
+><TD CLASS="rdoc"
+>The id of the first entity
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Int.html#t%3AInt"
+>Int</A
+></TD
+><TD CLASS="rdoc"
+>The id of the second entity
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+></TD
+><TD CLASS="rdoc"
+>The tableName
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; p <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/ghc-prim-0.2.0.0/GHC-Unit.html#t%3A%28%29"
+>()</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:findRelationImpl"
+><A NAME="v%3AfindRelationImpl"
+></A
+></A
+><B
+>findRelationImpl</B
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+>:: <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Either.html#t%3AEither"
+>Either</A
+> <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Int.html#t%3AInt"
+>Int</A
+> <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Int.html#t%3AInt"
+>Int</A
+></TD
+><TD CLASS="rdoc"
+><TT
+>Left</TT
+> means the left side of the relation, <TT
+>Right</TT
+> the right side.
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+></TD
+><TD CLASS="rdoc"
+>The tableName
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; p [<A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Int.html#t%3AInt"
+>Int</A
+>]</TD
+><TD CLASS="rdoc"
+>The result is a list of matching ids
+</TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:findImpl"
+><A NAME="v%3AfindImpl"
+></A
+></A
+><B
+>findImpl</B
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+>:: <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Int.html#t%3AInt"
+>Int</A
+></TD
+><TD CLASS="rdoc"
+>The id of the record
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+></TD
+><TD CLASS="rdoc"
+>The tableName
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; [<A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+>]</TD
+><TD CLASS="rdoc"
+>A list of fields that need to be fetch
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; p (<A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> [<A HREF="Data-Persist-Backend-Interface.html#t%3ADBValue"
+>DBValue</A
+>])</TD
+><TD CLASS="rdoc"
+>If the record is found, a <TT
+>Just</TT
+> containing the values for the fields
+</TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:findAllImpl"
+><A NAME="v%3AfindAllImpl"
+></A
+></A
+><B
+>findAllImpl</B
+> :: <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+> -&gt; [<A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+>] -&gt; p [[<A HREF="Data-Persist-Backend-Interface.html#t%3ADBValue"
+>DBValue</A
+>]]</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:updateImpl"
+><A NAME="v%3AupdateImpl"
+></A
+></A
+><B
+>updateImpl</B
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+>:: <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Int.html#t%3AInt"
+>Int</A
+></TD
+><TD CLASS="rdoc"
+>The id of the record
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+></TD
+><TD CLASS="rdoc"
+>The tableName
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; [(<A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+>, <A HREF="Data-Persist-Backend-Interface.html#t%3ADBValue"
+>DBValue</A
+>)]</TD
+><TD CLASS="rdoc"
+>The new values
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; p <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/ghc-prim-0.2.0.0/GHC-Unit.html#t%3A%28%29"
+>()</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:createSchemaForEntity"
+><A NAME="v%3AcreateSchemaForEntity"
+></A
+></A
+><B
+>createSchemaForEntity</B
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+>:: <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+></TD
+><TD CLASS="rdoc"
+>The tableName
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; [<A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+>]</TD
+><TD CLASS="rdoc"
+>The keys
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; p <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/ghc-prim-0.2.0.0/GHC-Unit.html#t%3A%28%29"
+>()</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:createSchemaForRelationship"
+><A NAME="v%3AcreateSchemaForRelationship"
+></A
+></A
+><B
+>createSchemaForRelationship</B
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+>:: <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/base-4.2.0.0/Data-Char.html#t%3AString"
+>String</A
+></TD
+><TD CLASS="rdoc"
+>The tableName
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; p <A HREF="/Library/Frameworks/GHC.framework/Versions/612/usr/share/doc/ghc/html/libraries/ghc-prim-0.2.0.0/GHC-Unit.html#t%3A%28%29"
+>()</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+></TABLE
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="section4"
+><IMG SRC="minus.gif" CLASS="coll" ONCLICK="toggle(this,'i:Persistent')" ALT="show/hide"
+> Instances</TD
+></TR
+><TR
+><TD CLASS="body"
+><DIV ID="i:Persistent" STYLE="display:block;"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><A HREF="Data-Persist-Interface.html#t%3APersistent"
+>Persistent</A
+> <A HREF="Data-Persist-Backend-SQLite.html#t%3ASQLite"
+>SQLite</A
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="botbar"
+>Produced by <A HREF="http://www.haskell.org/haddock/"
+>Haddock</A
+> version 2.6.0</TD
+></TR
+></TABLE
+></BODY
+></HTML
+>
