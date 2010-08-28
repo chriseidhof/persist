@@ -21,36 +21,36 @@ database for a simple quiz system. Each quiz has a number of questions, which
 all have a title and three options to choose from. When someone takes a quiz, a
 response is stored in the database.
 
-> data Response = Response {
->   name    :: String,
->   email   :: String,
->   date    :: Date,
->   answers :: [Int]
-> }
+    data Response = Response {
+      name    :: String,
+      email   :: String,
+      date    :: Date,
+      answers :: [Int]
+    }
 
-> data Quiz = Quiz {
->   description :: String,
->   subject     :: String
-> }
+    data Quiz = Quiz {
+      description :: String,
+      subject     :: String
+    }
 
-> data Question = Question {
->   title   :: String,
->   choiceA :: String,
->   choiceB :: String,
->   choiceC :: String
-> }
+    data Question = Question {
+      title   :: String,
+      choiceA :: String,
+      choiceB :: String,
+      choiceC :: String
+    }
 
 Now we will define the relationships:
 
-> relationship questions = Quiz <1-*> Question
+    relationship questions = Quiz <1-*> Question
 
-> relationship responses = Quiz <1-*> Response
+    relationship responses = Quiz <1-*> Response
 
 Step 2: Generate the corresponding code
 ---------------------------------------
 
-Put all the code from step 1 in a file called `Schema.phs` and execute the command `persist
-examples/Quiz.phs -o Quiz.hs`. This will generate a file called `Quiz.hs` with all the necessary
+Put all the code from step 1 in a file called `examples/Model.phs` and execute the command `persist
+examples/Model.phs -o examples/Model.hs`. This will generate a file called `Quiz.hs` with all the necessary
 code to continue. 
 
 In particular, the generated file will contain the following things:
